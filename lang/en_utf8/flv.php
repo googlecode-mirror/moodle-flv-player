@@ -34,6 +34,7 @@ $string['streamer'] = 'Streamer';
 
 //// Appearance
 $string['appearance'] = 'Appearance';
+$string['notes'] = 'Notes (appear under video)';
 $string['width'] = 'Width';
 $string['height'] = 'Height';
 $string['skin'] = 'Skin';
