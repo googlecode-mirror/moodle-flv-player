@@ -247,12 +247,55 @@ function flv_print_header_js($flv) {
 	// Build URL to moodledata directory
 	// This is where flv files and media should be stored
 	$flv_moodledata = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	// e.g. http://yourmoodlesite.com/file.php/99/
 	
-	// If it's from youtube.com or a URL link, we don't need the moodledata path
-	if($flv->type == 'youtube' || $flv->type == 'link') {
+	// If it's a sound, image or video, we need the moodledata path
+	if($flv->type == 'sound' || $flv->type == 'image' || $flv->type == 'video') {
+		$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
+	} else {
 		$flv_prefix = '';
+	}
+	
+	// Check for configuration XML file URL
+	if($flv->configxml == '') {
+		$flv_configxml = '';
+	} else {
+		$flv_configxml = $flv_moodledata.$flv->configxml.'?'.time();
+	}
+	
+	// Check for HD-Video content URL
+	if($flv->hdfile == '') {
+		$flv_hdfile = '';
+	} else {
+		$flv_hdfile = $flv_prefix.$flv->hdfile.'?'.time();
+	}
+	
+	// Check for poster image URL
+	if($flv->image == '') {
+		$flv_image = '';
+	} else {
+		$flv_image = $flv_moodledata.$flv->image.'?'.time();
+	}
+	
+	// Check for JW FLV Player skin URL
+	if($flv->skin == '') {
+		$flv_skin = '';
+	} else {
+		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin.'?'.time();
+	}
+	
+	// Check for logo URL
+	if($flv->logo == '') {
+		$flv_logo = '';
+	} else {
+		$flv_logo = $flv_moodledata.$flv->logo.'?'.time();
+	}
+	
+	// Check for captions XML URL
+	if($flv->captions == '') {
+		$flv_captions = '';
+	} else {
+		$flv_captions = $flv_moodledata.$flv->captions.'?'.time();
+		$flv->plugins = 'accessibility-1';
 	}
 	
 	// Build Javascript code for view.php print_header() function
@@ -260,13 +303,12 @@ function flv_print_header_js($flv) {
 		<script type="text/javascript">
 			var flashvars = {};
 			flashvars.author = "'.$flv->author.'";
-			flashvars.configxml = "'.$flv_moodledata.$flv->configxml.'?'.time().'";
+			flashvars.configxml = "'.$flv_configxml.'";
 			flashvars.date = "'.$flv->flvdate.'";
 			flashvars.description = "'.$flv->description.'";
-			flashvars.duration = "'.$flv->duration.'";
-			flashvars.file = "'.$flv_prefix.$flv->flvfile.'?'.time().'";
-			flashvars.hd.file = "'.$flv_prefix.$flv->hdfile.'?'.time().'";
-			flashvars.image = "'.$flv_moodledata.$flv->image.'?'.time().'";
+			flashvars.file = "'.$flv_prefix.$flv->flvfile.'";
+			flashvars.hd.file = "'.$flv_hdfile.'";
+			flashvars.image = "'.$flv_image.'";
 			flashvars.link = "'.$flv->link.'";
 			flashvars.start = "'.$flv->flvstart.'";
 			flashvars.tags = "'.$flv->tags.'";
@@ -279,15 +321,14 @@ function flv_print_header_js($flv) {
 			flashvars.controlbar = "'.$flv->controlbar.'";
 			flashvars.playlist = "'.$flv->playlist.'";
 			flashvars.playlistsize = "'.$flv->playlistsize.'";
-			flashvars.skin = "'.$CFG->wwwroot.'/mod/flv/skins/'.$flv->skin.'?'.time().'";
+			flashvars.skin = "'.$flv_skin.'";
 			flashvars.autostart = "'.$flv->autostart.'";
 			flashvars.bufferlength = "'.$flv->bufferlength.'";
 			flashvars.displayclick = "'.$flv->displayclick.'";
-			flashvars.fullscreen = "'.$flv->fullscreen.'";
 			flashvars.icons = "'.$flv->icons.'";
 			flashvars.item = "'.$flv->item.'";
 			flashvars.linktarget = "'.$flv->linktarget.'";
-			flashvars.logo = "'.$flv_moodledata.$flv->logo.'?'.time().'";
+			flashvars.logo = "'.$flv_logo.'";
 			flashvars.mute = "'.$flv->mute.'";
 			flashvars.quality = "'.$flv->quality.'";
 			flashvars.repeat = "'.$flv->flvrepeat.'";
@@ -301,7 +342,7 @@ function flv_print_header_js($flv) {
 			flashvars.client = "'.$flv->client.'";
 			flashvars.id = "'.$flv->flvid.'";
 			flashvars.plugins = "'.$flv->plugins.'";
-			flashvars.captions = "'.$flv_moodledata.$flv->captions.'?'.time().'";
+			flashvars.captions = "'.$flv_captions.'";
 			flashvars.streamer = "'.$flv->streamer.'";
 			flashvars.tracecall = "'.$flv->tracecall.'";
 			flashvars.version = "'.$flv->version.'";
@@ -316,7 +357,7 @@ function flv_print_header_js($flv) {
 			params.bgcolor = "";
 			params.devicefont = "true";
 			params.seamlesstabbing = "true";
-			params.allowfullscreen = "true";
+			params.allowfullscreen = "'.$flv->fullscreen.'";
 			params.allowscriptaccess = "always";
 			params.allownetworking = "all";
 			var attributes = {};
@@ -340,12 +381,55 @@ function flv_print_body($flv) {
 	// Build URL to moodledata directory
 	// This is where flv files and media should be stored
 	$flv_moodledata = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	// e.g. http://yourmoodlesite.com/file.php/99/
 	
-	// If it's from youtube.com or a URL link, we don't need the moodledata path
-	if($flv->type == 'youtube' || $flv->type == 'link') {
+	// If it's a sound, image or video, we need the moodledata path
+	if($flv->type == 'sound' || $flv->type == 'image' || $flv->type == 'video') {
+		$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
+	} else {
 		$flv_prefix = '';
+	}
+	
+	// Check for configuration XML file URL
+	if($flv->configxml == '') {
+		$flv_configxml = '';
+	} else {
+		$flv_configxml = $flv_moodledata.$flv->configxml.'?'.time();
+	}
+	
+	// Check for HD-Video content URL
+	if($flv->hdfile == '') {
+		$flv_hdfile = '';
+	} else {
+		$flv_hdfile = $flv_prefix.$flv->hdfile.'?'.time();
+	}
+	
+	// Check for poster image URL
+	if($flv->image == '') {
+		$flv_image = '';
+	} else {
+		$flv_image = $flv_moodledata.$flv->image.'?'.time();
+	}
+	
+	// Check for JW FLV Player skin URL
+	if($flv->skin == '') {
+		$flv_skin = '';
+	} else {
+		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin.'?'.time();
+	}
+	
+	// Check for logo URL
+	if($flv->logo == '') {
+		$flv_logo = '';
+	} else {
+		$flv_logo = $flv_moodledata.$flv->logo.'?'.time();
+	}
+	
+	// Check for captions XML URL
+	if($flv->captions == '') {
+		$flv_captions = '';
+	} else {
+		$flv_captions = $flv_moodledata.$flv->captions.'?'.time();
+		$flv->plugins = 'accessibility-1';
 	}
 	
 	$flv_body = '<div align="center">
@@ -362,10 +446,10 @@ function flv_print_body($flv) {
 				<param name="bgcolor" value="" />
 				<param name="devicefont" value="true" />
 				<param name="seamlesstabbing" value="true" />
-				<param name="allowfullscreen" value="true" />
+				<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 				<param name="allowscriptaccess" value="sameDomain" />
 				<param name="allownetworking" value="all" />
-				<param name="flashvars" value="configxml='.$flv_moodledata.$flv->configxml.'?'.time().'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;duration='.$flv->duration.'&amp;file='.$flv_prefix.$flv->flvfile.'?'.time().'&amp;image='.$flv_moodledata.$flv->image.'?'.time().'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_moodledata.$flv->skin.'?'.time().'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;fullscreen='.$flv->fullscreen.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_moodledata.$flv->logo.'?'.time().'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_moodledata.$flv->captions.'?'.time().'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+				<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--[if !IE]>-->
 				<object type="application/x-shockwave-flash" data="jw/player.swf" width="'.$flv->width.'" height="'.$flv->height.'" align="middle">
 					<param name="play" value="true" />
@@ -378,10 +462,10 @@ function flv_print_body($flv) {
 					<param name="bgcolor" value="" />
 					<param name="devicefont" value="true" />
 					<param name="seamlesstabbing" value="true" />
-					<param name="allowfullscreen" value="true" />
+					<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 					<param name="allowscriptaccess" value="sameDomain" />
 					<param name="allownetworking" value="all" />
-					<param name="flashvars" value="configxml='.$flv_moodledata.$flv->configxml.'?'.time().'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;duration='.$flv->duration.'&amp;file='.$flv_prefix.$flv->flvfile.'?'.time().'&amp;image='.$flv_moodledata.$flv->image.'?'.time().'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_moodledata.$flv->skin.'?'.time().'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;fullscreen='.$flv->fullscreen.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_moodledata.$flv->logo.'?'.time().'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_moodledata.$flv->captions.'?'.time().'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+					<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--<![endif]-->
 					<div align="center">
   						<p><strong><a href="http://longtailvideo.com/" target="_blank">JW FLV Player 4.3</a> requires <a href="http://www.adobe.com/products/flashplayer/">Flash Player 9.0.114</a> or above installed to function correctly.</strong></p>
@@ -392,7 +476,7 @@ function flv_print_body($flv) {
 				<!--<![endif]-->
 			</object>
 		</div>
-	</div>';
+	</div><div><p>'.$flv->notes.'</p></div>';
 	
 	return $flv_body;
 }
@@ -420,22 +504,29 @@ function flv_list_linktarget() {
 				'none' => 'none');
 }
 
+/**
+* Define target of link when user clicks on 'link' button
+* @return array
+*/
+/*function flv_list_plugins() {
+	return array('' => 'none',
+				'accessibility-1' => 'XML Captions');
+}*/
 
 /**
 * Define type of media to serve
 * @return array
 */
 function flv_list_type() {
-	return array('' => 'none',
-				'link' => 'URL Link',
+	return array('' => 'default',
 				'sound' => 'Sound',
 				'image' => 'Image',
 				'video' => 'Video',
 				'youtube' => 'YouTube',
 				'camera' => 'Camera',
-				'http' => 'HTTP',
-				'lighttpd' => 'Lighttpd',
-				'rtmp' => 'RTMP');
+				'http' => 'HTTP Streaming',
+				'lighttpd' => 'Lighttpd Streaming',
+				'rtmp' => 'RTMP Streaming');
 }
 
 /**
@@ -607,14 +698,6 @@ function flv_list_volume() {
 				'90' => '90',
 				'95' => '95',
 				'100' => '100');
-}
-
-/**
-* Insert plugins
-* @return array
-*/
-function flv_list_plugins() {
-	return array('accessibility-1','quickkeys-1','metaviewer-1','hd-1');
 }
 /// End of mod/flv/lib.php
 
