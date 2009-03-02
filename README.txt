@@ -39,7 +39,7 @@ To use:
 * Select 'Save changes' (Moodle 1.8) or 'Save changes and preview' (Moodle 1.9).
 That's it!
 
-matbury.com Wiki page: http://matbury.com/wiki/index.php?title=FLV_Player_Activity_Module
+Google Code page: http://code.google.com/p/moodle-flv-player/
 Moodle Docs page: http://docs.moodle.org/en/FLV_Player
 
 X-moov provides media pseudo-streaming and has been included but not implemented yet. 
