@@ -112,9 +112,10 @@ class mod_flv_mod_form extends moodleform_mod {
 //--------------------------------------- VIDEO SOURCE ----------------------------------------
 	$mform->addElement('header', 'flvsource', get_string('flvsource', 'flv'));
 	
-//$string['flvfile'] = 'File (flv)';
+//$string['flvfile'] = 'Video URL';
 	$mform->addElement('choosecoursefile', 'flvfile', get_string('flvfile', 'flv'), array('courseid'=>$COURSE->id));
 	$mform->addRule('flvfile', get_string('required'), 'required', null, 'client');
+	$mform->setHelpButton('flvfile', array('flv_videourl', get_string('flvfile', 'flv'), 'flv'));
 	
 //$string['hdfile'] = 'HD File (requires hd-1 plugin)'; - There's a bug in this so disabled for now.
 	//$mform->addElement('choosecoursefile', 'hdfile', get_string('hdfile', 'flv'), array('courseid'=>$COURSE->id));
@@ -124,14 +125,21 @@ class mod_flv_mod_form extends moodleform_mod {
 	$mform->addElement('select', 'type', get_string('type', 'flv'), flv_list_type());
 	$mform->setDefault('type', 'video');
 	$mform->setAdvanced('type');
+	$mform->setHelpButton('type', array('flv_videourl', get_string('type', 'flv'), 'flv'));
 
 //$string['streamer'] = 'Streamer';
 	$mform->addElement('select', 'streamer', get_string('streamer', 'flv'), flv_list_streamer());
 	$mform->setDefault('streamer', '');
 	$mform->setAdvanced('streamer');
+	$mform->setHelpButton('streamer', array('flv_videourl', get_string('streamer', 'flv'), 'flv'));
 
 ////--------------------------------------- APPEARANCE ---------------------------------------
 	$mform->addElement('header', 'appearance', get_string('appearance', 'flv'));
+	
+//$string['notes'] = 'Notes (appear under video)';
+    $mform->addElement('htmleditor', 'notes', get_string('notes', 'flv'), array('canUseHtmlEditor'=>'detect','rows'=>30, 'cols'=>65, 'width'=>0,'height'=>0));
+	$mform->setType('notes', PARAM_RAW);
+	$mform->setHelpButton('notes', array('flv_notes', get_string('notes', 'flv'), 'flv'));
 	
 //$string['width'] = 'Width';
 	$mform->addElement('text', 'width', get_string('width', 'flv'), array('size'=>'4'));
@@ -150,12 +158,14 @@ class mod_flv_mod_form extends moodleform_mod {
 
 //$string['image'] = 'Image';
 	$mform->addElement('choosecoursefile', 'image', get_string('image', 'flv'), array('courseid'=>$COURSE->id));
+	$mform->setHelpButton('image', array('flv_image', get_string('image', 'flv'), 'flv'));
 
 //$string['icons'] = 'Icons';
 	$mform->addElement('select', 'icons', get_string('icons', 'flv'), flv_list_truefalse());
 
 //$string['logo'] = 'Logo';
 	$mform->addElement('choosecoursefile', 'logo', get_string('logo', 'flv'), array('courseid'=>$COURSE->id));
+	$mform->setHelpButton('logo', array('flv_logo', get_string('logo', 'flv'), 'flv'));
 
 //$string['controlbar'] = 'Control Bar';
 	$mform->addElement('select', 'controlbar', get_string('controlbar', 'flv'), flv_list_controlbar());
@@ -165,27 +175,33 @@ class mod_flv_mod_form extends moodleform_mod {
 	$mform->addElement('select', 'playlist', get_string('playlist', 'flv'), flv_list_playlistposition());
 	$mform->setDefault('playlist', 'none');
 	$mform->setAdvanced('playlist');
+	$mform->setHelpButton('playlist', array('flv_playlist', get_string('playlist', 'flv'), 'flv'));
 
 //$string['playlistsize'] = 'Play List Size (pixels)';
 	$mform->addElement('text', 'playlistsize', get_string('playlistsize', 'flv'), array('size'=>'4'));
 	$mform->setDefault('playlistsize', '180');
 	$mform->setAdvanced('playlistsize');
+	$mform->setHelpButton('playlistsize', array('flv_playlist', get_string('playlistsize', 'flv'), 'flv'));
 
 //$string['backcolor'] = 'Back Color';
 	$mform->addElement('text', 'backcolor', get_string('backcolor', 'flv'), array('size'=>'6'));
 	$mform->setAdvanced('backcolor');
+	$mform->setHelpButton('backcolor', array('flv_colors', get_string('backcolor', 'flv'), 'flv'));
 	
 //$string['frontcolor'] = 'Front Color';
 	$mform->addElement('text', 'frontcolor', get_string('frontcolor', 'flv'), array('size'=>'6'));
 	$mform->setAdvanced('frontcolor');
+	$mform->setHelpButton('frontcolor', array('flv_colors', get_string('frontcolor', 'flv'), 'flv'));
 	
 //$string['lightcolor'] = 'Light Color';
 	$mform->addElement('text', 'lightcolor', get_string('lightcolor', 'flv'), array('size'=>'6'));
 	$mform->setAdvanced('lightcolor');
+	$mform->setHelpButton('lightcolor', array('flv_colors', get_string('lightcolor', 'flv'), 'flv'));
 	
 //$string['screencolor'] = 'Screen Color';
 	$mform->addElement('text', 'screencolor', get_string('screencolor', 'flv'), array('size'=>'6'));
 	$mform->setAdvanced('screencolor');
+	$mform->setHelpButton('screencolor', array('flv_colors', get_string('screencolor', 'flv'), 'flv'));
 	
 ////--------------------------------------- BEHAVIOUR ---------------------------------------
 	$mform->addElement('header', 'behaviour', get_string('behaviour', 'flv'));
@@ -194,7 +210,7 @@ class mod_flv_mod_form extends moodleform_mod {
 	$mform->addElement('select', 'autostart', get_string('autostart', 'flv'), flv_list_truefalse());
 	$mform->setDefault('autostart', 'false');
 	
-//$string['fullscreen'] = 'Full Screen';
+//$string['fullscreen'] = 'Allow Full Screen';
 	$mform->addElement('select', 'fullscreen', get_string('fullscreen', 'flv'), flv_list_truefalse());
 	$mform->setDefault('fullscreen', 'true');
 	
@@ -216,7 +232,7 @@ class mod_flv_mod_form extends moodleform_mod {
 
 //$string['item'] = 'Item';
 	$mform->addElement('text', 'item', get_string('item', 'flv'), array('size'=>'4'));
-	$mform->setDefault('item', '0');
+	$mform->setDefault('item', '');
 	$mform->setAdvanced('item');
 	
 //$string['shuffle'] = 'Shuffle';
@@ -226,11 +242,13 @@ class mod_flv_mod_form extends moodleform_mod {
 	
 //$string['flvstart'] = 'Start (position in seconds)';
 	$mform->addElement('text', 'flvstart', get_string('flvstart', 'flv'), array('size'=>'4'));
+	$mform->setDefault('flvstart', '0');
 	$mform->setAdvanced('flvstart');
 	
 //$string['duration'] = 'Duration (seconds)';
-	$mform->addElement('text', 'duration', get_string('duration', 'flv'), array('size'=>'4'));
-	$mform->setAdvanced('duration');
+	//$mform->addElement('text', 'duration', get_string('duration', 'flv'), array('size'=>'4'));
+	//$mform->setDefault('duration', '');
+	//$mform->setAdvanced('duration');
 	
 //$string['bufferlength'] = 'Buffer Length (seconds)';
 	$mform->addElement('select', 'bufferlength', get_string('bufferlength', 'flv'), flv_list_bufferlength());
@@ -262,7 +280,7 @@ class mod_flv_mod_form extends moodleform_mod {
 //$string['plugins'] = 'Plugins';
 	$flv_plugins_att = 'wrap="virtual" rows="3" cols="57"';
 	$mform->addElement('textarea', 'plugins', get_string('plugins', 'flv'), $flv_plugins_att);
-	$mform->setDefault('plugins', 'accessibility-1,');
+	$mform->setDefault('plugins', '');
 	$mform->setAdvanced('plugins');
 	
 //$string['captions'] = 'Timed Text Captions';
