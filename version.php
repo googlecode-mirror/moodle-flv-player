@@ -26,7 +26,7 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$module->version  = 2009022100;  // The current module version (Date: YYYYMMDDXX)
+$module->version  = 2009012800;  // The current module version (Date: YYYYMMDDXX)
 $module->cron     = 0;           // Period for cron to check this module (secs)
 
 ?>
