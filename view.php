@@ -24,8 +24,6 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/// (Replace flv with the name of your module)
-
 	require_once("../../config.php");
     require_once("lib.php");
 	
