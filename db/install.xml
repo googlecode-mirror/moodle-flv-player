@@ -61,7 +61,8 @@
 			<FIELD NAME="tracecall" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="streamer" NEXT="version"/>
 			<FIELD NAME="version" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="tracecall" NEXT="captions"/>
 			<FIELD NAME="captions" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="version" NEXT="fpversion"/>
-			<FIELD NAME="fpversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="fpversion"/>
+			<FIELD NAME="fpversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="captions" NEXT="notes"/>
+			<FIELD NAME="notes" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="fpversion"/>
 		</FIELDS>
 		<KEYS>
 			<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
