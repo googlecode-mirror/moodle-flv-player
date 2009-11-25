@@ -1,6 +1,7 @@
 <?php  // $Id: lib.php,v 0.2 2009/02/21 matbury Exp $
 /**
 * Library of functions and constants for module flv
+* For more information on the parameters used by JW FLV Player see documentation: http://developer.longtailvideo.com/trac/wiki/FlashVars
 * 
 * @author Matt Bury - matbury@gmail.com - http://matbury.com/
 * @version $Id: index.php,v 0.2 2009/02/21 matbury Exp $
@@ -23,8 +24,6 @@
 *    You should have received a copy of the GNU General Public License
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-$flv_CONSTANT = 7;     /// for example
 
 /**
  * Given an object containing all the necessary data, 
@@ -236,6 +235,7 @@ function flv_uninstall() {
 
 /**
 * Construct Javascript flvObject embed code for <head> section of view.php
+* Please note: some URLs append a '?'.time(); query to prevent browser caching
 *
 * @param $flv (mdl_flv DB record for current flv module instance)
 * @return string
@@ -248,11 +248,69 @@ function flv_print_header_js($flv) {
 	// This is where flv files and media should be stored
 	$flv_moodledata = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
 	
-	// If it's a sound, image or video, we need the moodledata path
-	if($flv->type == 'sound' || $flv->type == 'image' || $flv->type == 'video') {
-		$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	} else {
+	// Assign the correct path to the file parameter (media source)
+	switch($flv->type) {
+		
+		// video, sound, image and xml (SMIL playlists) are all served from moodledata course directories
+		case 'video':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case video';
+		break;
+		
+		case 'sound':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case sound';
+		break;
+		
+		case 'image':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case image';
+		break;
+		
+		case 'xml':
+		$flv_type = ''; // JW FLV Player doesn't recognise 'xml' as a valid parameter
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case playlist';
+		break;
+		
+		
+		case 'youtube':
+		$flv_type = $flv->type;
 		$flv_prefix = '';
+		$flv_test_variable = 'case youtube';
+		break;
+		
+		case 'url':
+		$flv_type = ''; // JW FLV Player doesn't recognise 'url' as a valid parameter
+		$flv_prefix = '';
+		$flv_test_variable = 'case url';
+		break;
+		
+		case 'http':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case http';
+		break;
+		
+		case 'lighttpd':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case lighttpd';
+		break;
+		
+		case 'rtmp':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case rtmp';
+		break;
+		
+		default;
+		$flv_type = ''; // Prevent failures due to errant parameters getting passed in
+		$flv_prefix = '';
+		$flv_test_variable = 'default';
 	}
 	
 	// Check for configuration XML file URL
@@ -295,7 +353,7 @@ function flv_print_header_js($flv) {
 		$flv_captions = '';
 	} else {
 		$flv_captions = $flv_moodledata.$flv->captions.'?'.time();
-		$flv->plugins = 'accessibility-1';
+		$flv->plugins = 'accessibility-1'; // add accessibility plugin parameter
 	}
 	
 	// Build Javascript code for view.php print_header() function
@@ -313,7 +371,7 @@ function flv_print_header_js($flv) {
 			flashvars.start = "'.$flv->flvstart.'";
 			flashvars.tags = "'.$flv->tags.'";
 			flashvars.title = "'.$flv->title.'";
-			flashvars.type = "'.$flv->type.'";
+			flashvars.type = "'.$flv_type.'";
 			flashvars.backcolor = "'.$flv->backcolor.'";
 			flashvars.frontcolor = "'.$flv->frontcolor.'";
 			flashvars.lightcolor = "'.$flv->lightcolor.'";
@@ -370,6 +428,7 @@ function flv_print_header_js($flv) {
 
 /**
 * Construct Javascript flvObject embed code for <body> section of view.php
+* Please note: some URLs append a '?'.time(); query to prevent browser caching
 *
 * @param $flv (mdl_flv DB record for current flv module instance)
 * @return string
@@ -382,11 +441,69 @@ function flv_print_body($flv) {
 	// This is where flv files and media should be stored
 	$flv_moodledata = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
 	
-	// If it's a sound, image or video, we need the moodledata path
-	if($flv->type == 'sound' || $flv->type == 'image' || $flv->type == 'video') {
-		$flv_prefix = $CFG->wwwroot.'/file.php/'.$COURSE->id.'/';
-	} else {
+	// Assign the correct path to the file parameter (media source)
+	switch($flv->type) {
+		
+		// video, sound, image and xml (SMIL playlists) are all served from moodledata course directories
+		case 'video':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case video';
+		break;
+		
+		case 'sound':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case sound';
+		break;
+		
+		case 'image':
+		$flv_type = $flv->type;
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case image';
+		break;
+		
+		case 'xml':
+		$flv_type = ''; // JW FLV Player doesn't recognise 'xml' as a valid parameter
+		$flv_prefix = $flv_moodledata;
+		$flv_test_variable = 'case playlist';
+		break;
+		
+		
+		case 'youtube':
+		$flv_type = $flv->type;
 		$flv_prefix = '';
+		$flv_test_variable = 'case youtube';
+		break;
+		
+		case 'url':
+		$flv_type = ''; // JW FLV Player doesn't recognise 'url' as a valid parameter
+		$flv_prefix = '';
+		$flv_test_variable = 'case url';
+		break;
+		
+		case 'http':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case http';
+		break;
+		
+		case 'lighttpd':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case lighttpd';
+		break;
+		
+		case 'rtmp':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case rtmp';
+		break;
+		
+		default;
+		$flv_type = ''; // Prevent failures due to errant parameters getting passed in
+		$flv_prefix = '';
+		$flv_test_variable = 'default';
 	}
 	
 	// Check for configuration XML file URL
@@ -449,7 +566,7 @@ function flv_print_body($flv) {
 				<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 				<param name="allowscriptaccess" value="sameDomain" />
 				<param name="allownetworking" value="all" />
-				<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+				<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--[if !IE]>-->
 				<object type="application/x-shockwave-flash" data="jw/player.swf" width="'.$flv->width.'" height="'.$flv->height.'" align="middle">
 					<param name="play" value="true" />
@@ -465,7 +582,7 @@ function flv_print_body($flv) {
 					<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 					<param name="allowscriptaccess" value="sameDomain" />
 					<param name="allownetworking" value="all" />
-					<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv->type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+					<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--<![endif]-->
 					<div align="center">
   						<p><strong><a href="http://longtailvideo.com/" target="_blank">JW FLV Player 4.3</a> requires <a href="http://www.adobe.com/products/flashplayer/">Flash Player 9.0.114</a> or above installed to function correctly.</strong></p>
@@ -476,7 +593,10 @@ function flv_print_body($flv) {
 				<!--<![endif]-->
 			</object>
 		</div>
-	</div><div><p>'.$flv->notes.'</p></div>';
+	</div><div><p>'.$flv->notes.'</div><br/>';
+	
+	// For testing
+	//$flv_body .= '$flv_test_variable = '.$flv_test_variable.'<br/>$flv_prefix = '.$flv_prefix.'<br/>$flv->flvfile = '.$flv->flvfile.print_object($flv);
 	
 	return $flv_body;
 }
@@ -505,7 +625,9 @@ function flv_list_linktarget() {
 }
 
 /**
-* Define target of link when user clicks on 'link' button
+* Define target of link when user clicks on 'link' button (not yet implemented)
+* Plugins add things like accessibility, analytics, HD video quality toggle switches, etc.
+* There's a list of plugins that use this parameter at: http://www.longtailvideo.com/addons/plugins
 * @return array
 */
 /*function flv_list_plugins() {
@@ -518,13 +640,13 @@ function flv_list_linktarget() {
 * @return array
 */
 function flv_list_type() {
-	return array('' => 'default',
+	return array('video' => 'Video',
+				'youtube' => 'YouTube',
+				'url' => 'Full URL',
+				'xml' => 'XML Playlist',
 				'sound' => 'Sound',
 				'image' => 'Image',
-				'video' => 'Video',
-				'youtube' => 'YouTube',
-				'camera' => 'Camera',
-				'http' => 'HTTP Streaming',
+				'http' => 'HTTP (pseudo) Streaming',
 				'lighttpd' => 'Lighttpd Streaming',
 				'rtmp' => 'RTMP Streaming');
 }
@@ -536,14 +658,20 @@ function flv_list_type() {
 * enter the path to the gateway in the corresponding empty quotes
 * and uncomment the appropriate lines
 * e.g. 'path/to/your/gateway.jsp' => 'RTMP');
+*
+* For RTMP streaming, uncomment and edit this line: //, 'rtmp://yourstreamingserver.com/yourmediadirectory' => 'RTMP'
+* to reflect your streaming server's details. It's probably a good idea to change the 'RTMP' bit to the name of your streaming service,
+* i.e. 'My Media Server' or 'Acme Media Server'.
+* Remember not to include the ".flv" file extensions in video file names when using RTMP.
 * @return array
 */
 function flv_list_streamer() {
 	global $CFG;
-	return array('' => 'none'/*,
-				$CFG->wwwroot.'/mod/flv/xmoov/xmoov.php' => 'Xmoov-php (http)',
-				'' => 'Lighttpd',
-				'' => 'RTMP'*/);
+	return array('' => 'none'
+				 //, $CFG->wwwroot.'/mod/flv/xmoov/xmoov.php' => 'Xmoov-php (http)'
+				 //, '' => 'Lighttpd'
+				 //, 'rtmp://yourstreamingserver.com/yourmediadirectory' => 'RTMP'
+				 );
 }
 
 /**
@@ -569,6 +697,12 @@ function flv_list_playlistposition() {
 
 /**
 * Skins define the general appearance of the JW FLV Player
+* Skins can be downloaded from: http://www.longtailvideo.com/addons/skins
+* Skins (the .swf file only) are kept in /mod/flv/skins/
+* New skins must be added to the array below manually for them to show up on the mod_form.php list.
+* Copy and paste the following line into the array below then edit it to match the name and filename of your new skin:
+				'filename.swf' => 'Name',
+* I find alphabetical order works best ;)
 * @return array
 */
 function flv_list_skins() {
@@ -603,6 +737,7 @@ function flv_list_skins() {
 
 /**
 * Define number of seconds of video stream to buffer before playing
+* Longer buffer lengths can be given if a lot of users have particularly slow Internet connections
 * @return array
 */
 function flv_list_bufferlength() {
@@ -664,6 +799,7 @@ function flv_list_repeat() {
 
 /**
 * Define scaling properties of video stream
+* i.e. the way the video adjusts its dimensions to fit the FLV player window
 * @return array
 */
 function flv_list_stretching() {
@@ -673,7 +809,7 @@ function flv_list_stretching() {
 }
 
 /**
-* Define playback volume
+* Define default playback volume
 * @return array
 */
 function flv_list_volume() {
