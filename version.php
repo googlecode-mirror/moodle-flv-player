@@ -1,11 +1,10 @@
-<?php // $Id: version.php,v 0.2 2009/02/21 matbury Exp $
-
+<?php
 /**
  * Code fragment to define the version of flv
  * This fragment is called by moodle_needs_upgrading() and /admin/index.php
  *
  * @author Matt Bury - matbury@gmail.com - http://matbury.com/
- * @version $Id: version.php,v 0.2 2009/02/21 matbury Exp $
+ * @version $Id: version.php,v 0.3 2009/11/25 matbury Exp $
  * @licence http://www.gnu.org/copyleft/gpl.html GNU Public Licence
  * @package flv
  **/
@@ -26,7 +25,7 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$module->version  = 2009012800;  // The current module version (Date: YYYYMMDDXX)
+$module->version  = 2009112500;  // The current module version (Date: YYYYMMDDXX)
 $module->cron     = 0;           // Period for cron to check this module (secs)
 
 ?>
