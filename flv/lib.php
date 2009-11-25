@@ -295,6 +295,12 @@ function flv_print_header_js($flv) {
 		$flv_test_variable = 'case http';
 		break;
 		
+		case 'lighttpd':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case lighttpd';
+		break;
+		
 		case 'rtmp':
 		$flv_type = $flv->type;
 		$flv_prefix = '';
@@ -482,6 +488,12 @@ function flv_print_body($flv) {
 		$flv_test_variable = 'case http';
 		break;
 		
+		case 'lighttpd':
+		$flv_type = $flv->type;
+		$flv_prefix = '';
+		$flv_test_variable = 'case lighttpd';
+		break;
+		
 		case 'rtmp':
 		$flv_type = $flv->type;
 		$flv_prefix = '';
@@ -635,6 +647,7 @@ function flv_list_type() {
 				'sound' => 'Sound',
 				'image' => 'Image',
 				'http' => 'HTTP (pseudo) Streaming',
+				'lighttpd' => 'Lighttpd Streaming',
 				'rtmp' => 'RTMP Streaming');
 }
 
