@@ -85,6 +85,7 @@
         fwrite ($bf,full_tag("ITEM",4,false,$flv->item));
         fwrite ($bf,full_tag("LINKTARGET",4,false,$flv->linktarget));
         fwrite ($bf,full_tag("LOGO",4,false,$flv->logo));
+        fwrite ($bf,full_tag("LOGOLINK",4,false,$flv->logolink));
         fwrite ($bf,full_tag("MUTE",4,false,$flv->mute));
         fwrite ($bf,full_tag("QUALITY",4,false,$flv->quality));
         fwrite ($bf,full_tag("FLVREPEAT",4,false,$flv->flvrepeat));
@@ -107,7 +108,7 @@
         //End mod
         $status = fwrite ($bf,end_tag("MOD",3,true));
 
-        if ($status && ($flv->type == 'file' || $flv->type == 'directory' || $flv->type == 'ims')) { // more should go here later!
+        if ($status) {
             // backup files for this flv.
             $status = flv_backup_files($bf,$preferences,$flv);
         }
@@ -183,27 +184,27 @@
         global $CFG;
         $status = true;
 
-        if (!file_exists($CFG->dataroot.'/'.$preferences->backup_course.'/'.$flv->reference)) {
+        if (!file_exists($CFG->dataroot.'/'.$preferences->backup_course.'/'.$flv->flvfile)) {
             return true ; // doesn't exist but we don't want to halt the entire process so still return true.
         }
         
         $status = $status && check_and_create_course_files_dir($preferences->backup_unique_code);
 
         // if this is somewhere deeply nested we need to do all the structure stuff first.....
-        $bits = explode('/',$flv->reference);
+        $bits = explode('/',$flv->flvfile);
         $newbit = '';
         for ($i = 0; $i< count($bits)-1; $i++) {
             $newbit .= $bits[$i].'/';
             $status = $status && check_dir_exists($CFG->dataroot.'/temp/backup/'.$preferences->backup_unique_code.'/course_files/'.$newbit,true);
         }
 
-        if ($flv->reference === '') {
+        if ($flv->flvfile === '') {
             $status = $status && backup_copy_course_files($preferences); // copy while ignoring backupdata and moddata!!!
-        } else if (strpos($flv->reference, 'backupdata') === 0 or strpos($flv->reference, $CFG->moddata) === 0) {
+        } else if (strpos($flv->flvfile, 'backupdata') === 0 or strpos($flv->flvfile, $CFG->moddata) === 0) {
             // no copying - these directories must not be shared anyway!
         } else {
-            $status = $status && backup_copy_file($CFG->dataroot."/".$preferences->backup_course."/".$flv->reference,
-                                                  $CFG->dataroot."/temp/backup/".$preferences->backup_unique_code."/course_files/".$flv->reference);
+            $status = $status && backup_copy_file($CFG->dataroot."/".$preferences->backup_course."/".$flv->flvfile,
+                                                  $CFG->dataroot."/temp/backup/".$preferences->backup_unique_code."/course_files/".$flv->flvfile);
         }
          
         // now, just in case we check moddata ( going forwards, flvs should use this )
