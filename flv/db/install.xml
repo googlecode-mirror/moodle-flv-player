@@ -43,8 +43,9 @@
 			<FIELD NAME="icons" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="fullscreen" NEXT="item"/>
 			<FIELD NAME="item" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="icons" NEXT="linktarget"/>
 			<FIELD NAME="linktarget" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="item" NEXT="logo"/>
-			<FIELD NAME="logo" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="linktarget" NEXT="mute"/>
-			<FIELD NAME="mute" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="logo" NEXT="quality"/>
+			<FIELD NAME="logo" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="linktarget" NEXT="logolink"/>
+			<FIELD NAME="logolink" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="logo" NEXT="mute"/>
+			<FIELD NAME="mute" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="logolink" NEXT="quality"/>
 			<FIELD NAME="quality" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="mute" NEXT="flvrepeat"/>
 			<FIELD NAME="flvrepeat" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="quality" NEXT="resizing"/>
 			<FIELD NAME="resizing" TYPE="char" LENGTH="11" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="" PREVIOUS="flvrepeat" NEXT="shuffle"/>
@@ -72,13 +73,4 @@
 		</INDEXES>
 	</TABLE>
   </TABLES>
-  <STATEMENTS>
-    <STATEMENT NAME="insert log_display" TYPE="insert" TABLE="log_display" COMMENT="Initial insert of records on table log_display. Each record describes how data will be showed by log reports.">
-      <SENTENCES>
-        <SENTENCE TEXT="(module, action, mtable, field) VALUES ('flv', 'add', 'flv', 'name')" />
-        <SENTENCE TEXT="(module, action, mtable, field) VALUES ('flv', 'update', 'flv', 'name')" />
-        <SENTENCE TEXT="(module, action, mtable, field) VALUES ('flv', 'view', 'flv', 'name')" />
-      </SENTENCES>
-    </STATEMENT>
-  </STATEMENTS>
 </XMLDB>
