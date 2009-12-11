@@ -71,6 +71,7 @@
 			$flv->item = backup_todb($info['MOD']['#']['ITEM']['0']['#']);
 			$flv->linktarget = backup_todb($info['MOD']['#']['LINKTARGET']['0']['#']);
 			$flv->logo = backup_todb($info['MOD']['#']['LOGO']['0']['#']);
+			$flv->logolink = backup_todb($info['MOD']['#']['LOGOLINK']['0']['#']);
 			$flv->mute = backup_todb($info['MOD']['#']['MUTE']['0']['#']);
 			$flv->quality = backup_todb($info['MOD']['#']['QUALITY']['0']['#']);
 			$flv->flvrepeat = backup_todb($info['MOD']['#']['FLVREPEAT']['0']['#']);
@@ -125,7 +126,7 @@
         $status = true;
 		
 		//
-		if ($flvs = get_records_sql ("SELECT f.id, f.configxml, f.flvfile, f.hdfile, f.image, f.link, f.skin, f.abouttext, f.aboutlink f.streamer, f.captions, f.notes
+		if ($flvs = get_records_sql ("SELECT f.id, f.configxml, f.flvfile, f.hdfile, f.image, f.link, f.skin, f.logo, f.logolink, f.abouttext, f.aboutlink f.streamer, f.captions, f.notes
                                    FROM {$CFG->prefix}flv f
                                    WHERE f.course = $restore->course_id")) {
             $i = 0;   //Counter to send some output to the browser to avoid timeouts
@@ -139,6 +140,8 @@
 				$image = $flv->image;
 				$link = $flv->link;
 				$skin = $flv->skin;
+				$logo = $flv->logo;
+				$logolink = $flv->logolink;
 				$abouttext = $flv->abouttext;
 				$aboutlink = $flv->aboutlink;
 				$streamer = $flv->streamer;
@@ -151,13 +154,15 @@
 				$r_image = restore_decode_content_links_worker($image,$restore);
 				$r_link = restore_decode_content_links_worker($link,$restore);
 				$r_skin = restore_decode_content_links_worker($skin,$restore);
+				$r_logo = restore_decode_content_links_worker($logo,$restore);
+				$r_logolink = restore_decode_content_links_worker($logolink,$restore);
 				$r_abouttext = restore_decode_content_links_worker($abouttext,$restore);
 				$r_aboutlink = restore_decode_content_links_worker($aboutlink,$restore);
 				$r_streamer = restore_decode_content_links_worker($streamer,$restore);
 				$r_captions = restore_decode_content_links_worker($captions,$restore);
 				$r_notes = restore_decode_content_links_worker($notes,$restore);
 				//
-				if ($r_configxml != $configxml || $r_flvfile != $flvfile || $r_hdfile != $hdfile || $r_image != $image || $r_link != $link || $r_skin != $skin || $r_abouttext != $abouttext || $r_aboutlink != $aboutlink || $r_streamer != $streamer || $r_captions != $captions || $r_notes != $notes) {
+				if ($r_configxml != $configxml || $r_flvfile != $flvfile || $r_hdfile != $hdfile || $r_image != $image || $r_link != $link || $r_skin != $skin || $r_logo != $logo || $r_logolink != $logolink || $r_abouttext != $abouttext || $r_aboutlink != $aboutlink || $r_streamer != $streamer || $r_captions != $captions || $r_notes != $notes) {
                     //Update record
                     $flv->configxml = addslashes($r_configxml);
 					$flv->flvfile = addslashes($r_flvfile);
@@ -165,6 +170,8 @@
 					$flv->image = addslashes($r_image);
 					$flv->link = addslashes($r_link);
 					$flv->skin = addslashes($r_skin);
+					$flv->logo = addslashes($r_logo);
+					$flv->logolink = addslashes($r_logolink);
 					$flv->abouttext = addslashes($r_abouttext);
 					$flv->aboutlink = addslashes($r_aboutlink);
 					$flv->streamer = addslashes($r_streamer);
@@ -180,6 +187,8 @@
 							echo '<br /><hr />'.s($image).'<br />changed to<br />'.s($r_image).'<hr /><br />';
 							echo '<br /><hr />'.s($link).'<br />changed to<br />'.s($r_link).'<hr /><br />';
 							echo '<br /><hr />'.s($skin).'<br />changed to<br />'.s($r_skin).'<hr /><br />';
+							echo '<br /><hr />'.s($logo).'<br />changed to<br />'.s($r_logo).'<hr /><br />';
+							echo '<br /><hr />'.s($logolink).'<br />changed to<br />'.s($r_logolink).'<hr /><br />';
 							echo '<br /><hr />'.s($abouttext).'<br />changed to<br />'.s($r_abouttext).'<hr /><br />';
 							echo '<br /><hr />'.s($aboutlink).'<br />changed to<br />'.s($r_aboutlink).'<hr /><br />';
 							echo '<br /><hr />'.s($streamer).'<br />changed to<br />'.s($r_streamer).'<hr /><br />';
