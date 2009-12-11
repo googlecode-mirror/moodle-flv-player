@@ -41,6 +41,7 @@ $string['skin'] = 'Skin';
 $string['image'] = 'Image';
 $string['icons'] = 'Icons';
 $string['logo'] = 'Logo';
+$string['logolink'] = 'Logo link';
 $string['controlbar'] = 'Control Bar';
 $string['playlist'] = 'Play List (position)';
 $string['playlistsize'] = 'Play List Size (pixels)';
