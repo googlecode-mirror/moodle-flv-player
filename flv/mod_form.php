@@ -166,11 +166,16 @@ class mod_flv_mod_form extends moodleform_mod {
 //$string['logo'] = 'Logo';
 	$mform->addElement('choosecoursefile', 'logo', get_string('logo', 'flv'), array('courseid'=>$COURSE->id));
 	$mform->setHelpButton('logo', array('flv_logo', get_string('logo', 'flv'), 'flv'));
+	$mform->setAdvanced('logo');
+
+//$string['logolink'] = 'Logo link';
+	$mform->addElement('choosecoursefile', 'logolink', get_string('logolink', 'flv'), array('courseid'=>$COURSE->id));
+	$mform->setAdvanced('logolink');
 
 //$string['controlbar'] = 'Control Bar';
 	$mform->addElement('select', 'controlbar', get_string('controlbar', 'flv'), flv_list_controlbar());
 	$mform->setDefault('controlbar', 'bottom');
-
+	
 //$string['playlist'] = 'Play List (position)';
 	$mform->addElement('select', 'playlist', get_string('playlist', 'flv'), flv_list_playlistposition());
 	$mform->setDefault('playlist', 'none');
@@ -313,14 +318,14 @@ class mod_flv_mod_form extends moodleform_mod {
 	$mform->addElement('choosecoursefile', 'configxml', get_string('configxml', 'flv'), array('courseid'=>$COURSE->id));
 	$mform->setAdvanced('configxml');
 	
-//$string['version'] = 'Version';
+//$string['version'] = 'JW Player Version';
 	$mform->addElement('text', 'version', get_string('version', 'flv'), array('size'=>'9'));
-	$mform->setDefault('version', '4.3');
+	$mform->setDefault('version', '5.0');
 	$mform->setAdvanced('version');
 	
 //$string['fpversion'] = 'Flash Player Version';
 	$mform->addElement('text', 'fpversion', get_string('fpversion', 'flv'), array('size'=>'9'));
-	$mform->setDefault('fpversion', '9.0.114');
+	$mform->setDefault('fpversion', '9.0.115');
 	$mform->addRule('fpversion', get_string('required'), 'required', null, 'client');
 	$mform->setAdvanced('fpversion');
 	
