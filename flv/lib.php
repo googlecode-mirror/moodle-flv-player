@@ -338,14 +338,16 @@ function flv_print_header_js($flv) {
 	if($flv->skin == '') {
 		$flv_skin = '';
 	} else {
-		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin.'?'.time();
+		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin;
 	}
 	
 	// Check for logo URL
 	if($flv->logo == '') {
 		$flv_logo = '';
+		$flv_logolink = '';
 	} else {
-		$flv_logo = $flv_moodledata.$flv->logo.'?'.time();
+		$flv_logo = $flv_moodledata.$flv->logo;
+		$flv_logolink = $flv_moodledata.$flv->logolink; // Can only link to files in course files directory
 	}
 	
 	// Check for captions XML URL
@@ -386,7 +388,8 @@ function flv_print_header_js($flv) {
 			flashvars.icons = "'.$flv->icons.'";
 			flashvars.item = "'.$flv->item.'";
 			flashvars.linktarget = "'.$flv->linktarget.'";
-			flashvars.logo = "'.$flv_logo.'";
+			flashvars.logo.file = "'.$flv_logo.'";
+			flashvars.logo.link = "'.$flv_logolink.'";
 			flashvars.mute = "'.$flv->mute.'";
 			flashvars.quality = "'.$flv->quality.'";
 			flashvars.repeat = "'.$flv->flvrepeat.'";
@@ -423,6 +426,7 @@ function flv_print_header_js($flv) {
 			swfobject.embedSWF("jw/player.swf", "myAlternativeContent", "'.$flv->width.'", "'.$flv->height.'", "'.$flv->fpversion.'", "swfobject/expressInstall.swf", flashvars, params, attributes);
 		</script>';
 	
+	//return ''; // uncomment this line to test alternative embed code
 	return $flv_header_js;
 }
 
@@ -531,14 +535,16 @@ function flv_print_body($flv) {
 	if($flv->skin == '') {
 		$flv_skin = '';
 	} else {
-		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin.'?'.time();
+		$flv_skin = $CFG->wwwroot.'/mod/flv/skins/'.$flv->skin;
 	}
 	
 	// Check for logo URL
 	if($flv->logo == '') {
 		$flv_logo = '';
+		$flv_logolink = '';
 	} else {
-		$flv_logo = $flv_moodledata.$flv->logo.'?'.time();
+		$flv_logo = $flv_moodledata.$flv->logo;
+		$flv_logolink = $flv_moodledata.$flv->logolink; // Can only link to files in course files directory
 	}
 	
 	// Check for captions XML URL
@@ -566,7 +572,7 @@ function flv_print_body($flv) {
 				<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 				<param name="allowscriptaccess" value="sameDomain" />
 				<param name="allownetworking" value="all" />
-				<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+				<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo.file='.$flv_logo.'&amp;logo.link='.$flv_logolink.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--[if !IE]>-->
 				<object type="application/x-shockwave-flash" data="jw/player.swf" width="'.$flv->width.'" height="'.$flv->height.'" align="middle">
 					<param name="play" value="true" />
@@ -582,7 +588,7 @@ function flv_print_body($flv) {
 					<param name="allowfullscreen" value="'.$flv->fullscreen.'" />
 					<param name="allowscriptaccess" value="sameDomain" />
 					<param name="allownetworking" value="all" />
-					<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo='.$flv_logo.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
+					<param name="flashvars" value="configxml='.$flv_configxml.'author='.$flv->author.'&amp;date='.$flv->flvdate.'&amp;description='.$flv->description.'&amp;file='.$flv_prefix.$flv->flvfile.'&amp;image='.$flv_image.'&amp;link='.$flv->link.'&amp;start='.$flv->flvstart.'&amp;tags='.$flv->tags.'&amp;title='.$flv->title.'&amp;type='.$flv_type.'&amp;backcolor='.$flv->backcolor.'&amp;frontcolor='.$flv->frontcolor.'&amp;lightcolor='.$flv->lightcolor.'&amp;screencolor='.$flv->screencolor.'&amp;controlbar='.$flv->controlbar.'&amp;playlist='.$flv->playlist.'&amp;playlistsize='.$flv->playlistsize.'&amp;skin='.$flv_skin.'&amp;autostart='.$flv->autostart.'&amp;bufferlength='.$flv->bufferlength.'&amp;displayclick='.$flv->displayclick.'&amp;icons='.$flv->icons.'&amp;item='.$flv->item.'&amp;linktarget='.$flv->linktarget.'&amp;logo.file='.$flv_logo.'&amp;logo.link='.$flv_logolink.'&amp;mute='.$flv->mute.'&amp;quality='.$flv->quality.'&amp;repeat='.$flv->flvrepeat.'&amp;resizing='.$flv->resizing.'&amp;shuffle='.$flv->shuffle.'&amp;state='.$flv->state.'&amp;stretching='.$flv->stretching.'&amp;volume='.$flv->volume.'&amp;abouttext='.$flv->abouttext.'&amp;aboutlink='.$flv->aboutlink.'&amp;client='.$flv->client.'&amp;id='.$flv->flvid.'&amp;plugins='.$flv->plugins.'&amp;captions='.$flv_captions.'&amp;streamer='.$flv->streamer.'&amp;tracecall='.$flv->tracecall.'&amp;version='.$flv->version.'" />
 				<!--<![endif]-->
 					<div align="center">
   						<p><strong><a href="http://longtailvideo.com/" target="_blank">JW FLV Player 4.3</a> requires <a href="http://www.adobe.com/products/flashplayer/">Flash Player 9.0.114</a> or above installed to function correctly.</strong></p>
@@ -707,6 +713,7 @@ function flv_list_playlistposition() {
 */
 function flv_list_skins() {
 	return array('' => '',
+				'beelden/beelden.xml' => 'Beelden XML Skin',
 				'3dpixelstyle.swf' => '3D Pixel Style',
 				'atomicred.swf' => 'Atomic Red',
 				'bekle.swf' => 'Bekle',
